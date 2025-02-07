@@ -18,7 +18,6 @@ yum install -y docker amazon-cloudwatch-agent
 systemctl enable --now docker
 
 # Set up things for the runner
-mkdir -p /opt/nuon/runner
 useradd runner -G docker -c "" -d /opt/nuon/runner
 chown -R runner:runner /opt/nuon/runner
 
@@ -40,10 +39,10 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 User=runner
-ExecStartPre=-/usr/bin/docker exec %%n stop
-ExecStartPre=-/usr/bin/docker rm %%n
+ExecStartPre=-/usr/bin/docker exec %n stop
+ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/usr/bin/docker pull public.ecr.aws/p7e3r5y0/runner:latest
-ExecStart=/usr/bin/docker run --rm --name %%n -p 5000:5000 --detach --env-file /opt/nuon/runner/env public.ecr.aws/p7e3r5y0/runner:latest run
+ExecStart=/usr/bin/docker run --rm --name %n -p 5000:5000 --detach --env-file /opt/nuon/runner/env public.ecr.aws/p7e3r5y0/runner:latest run
 Restart=always
 RestartSec=3
 
