@@ -2,7 +2,7 @@
 
 get_tag() {
     local tag_name=$1
-    local instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+    local instance_id=$(ec2-metadata -i | awk '{ print $2 }')
     
     aws ec2 describe-tags \
         --filters "Name=resource-id,Values=$instance_id" "Name=key,Values=$tag_name" \
